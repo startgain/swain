@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Eruda-swain</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <script src="node_modules/eruda/eruda.js"></script>
+    <script>
+    window.LOCAL_CONFIG = {
+        eruda: {
+            plugins: ['plugin-demo']
+        }
+    }
+    </script>
+    <script>eruda.init({tool: []});</script>
+    <script src="eruda-swain.js"></script>
+    <script>
+        eruda.add(erudaSwain).show('swain').show();
+    </script>
+</body>
+</html>    

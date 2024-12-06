@@ -1,0 +1,27 @@
+{
+  "name": "eruda-swain",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "eruda-swain.js",
+  "files": [
+    "eruda-swain.js",
+    "eruda-swain.min.js"
+  ],
+  "scripts": {
+    "build": "uglifyjs eruda-swain.js -o eruda-swain.min.js --mangle",
+    "lint": "eslint eruda-swain.js",
+    "ci": "npm run lint && npm run build",
+    "dev": "http-server"
+  },
+  "keywords": [
+    "eruda",
+    "plugin"
+  ],
+  "author": "",
+  "devDependencies": {
+    "eruda": "^3.2.0",
+    "eslint": "^8.36.0",
+    "http-server": "^14.1.1",
+    "uglify-js": "^3.19.0"
+  }
+}
