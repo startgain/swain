@@ -1,29 +1,89 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Eruda-swain</title>
+    <title>Eruda Demo</title>
     <style>
         body {
             padding: 0;
             margin: 0;
         }
     </style>
-</head>
-<body>
+    <!-- 引入 eruda -->
     <script src="node_modules/eruda/eruda.js"></script>
     <script>
     window.LOCAL_CONFIG = {
-        eruda: {
-            plugins: ['plugin-demo']
+        // 基础配置
+        apiUrl: 'https://api.example.com/v1',
+        debug: true,
+        env: 'development',
+        version: '1.0.0',
+        
+        // API配置
+        api: {
+            baseUrl: 'https://api.example.com',
+            timeout: 5000,
+            retryCount: 3,
+            maxConcurrent: 5
+        },
+        
+        // 功能开关
+        features: {
+            darkMode: true,
+            notification: false,
+            autoUpdate: true,
+            offlineMode: false
+        },
+        
+        // 安全配置
+        security: {
+            encryption: 'ssl',
+            tokenExpiry: 24,
+            passwordPolicy: 'strong',
+            maxLoginAttempts: 5
+        },
+        
+        // 性能配置
+        performance: {
+            caching: true,
+            compression: 'gzip',
+            lazyLoading: true,
+            preload: false
+        },
+        
+        // 界面配置
+        ui: {
+            theme: 'light',
+            language: 'zh-CN',
+            fontSize: 14,
+            animation: true
         }
     }
     </script>
-    <script>eruda.init({tool: []});</script>
+    <!-- 引入插件 -->
     <script src="eruda-swain.js"></script>
+    <script src="eruda-detail.js"></script>
     <script>
-        eruda.add(erudaSwain).show('swain').show();
+        // 初始化 eruda，只显示需要的工具
+        eruda.init({
+            tool: ['settings', 'detail', 'swain'],
+            defaults: {
+                displaySize: 70,     // 面板高度占比
+                transparency: 0.9,    // 面板透明度
+                theme: 'Light'       // 主题
+            }
+        });
+        
+        // 注册插件
+        eruda.add(erudaSwain);
+        eruda.add(erudaDetail);
+        
+        // 默认显示 swain 面板
+        eruda.show('swain');
     </script>
+</head>
+<body>
+    <!-- 页面内容 -->
 </body>
 </html>    
