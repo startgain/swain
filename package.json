@@ -1,17 +1,16 @@
 {
-  "name": "eruda-swain",
-  "type": "module",
+  "name": "eruda-config",
   "version": "1.0.0",
-  "main": "eruda-swain.js",
+  "main": "eruda-config.js",
   "files": [
-    "eruda-swain.js",
-    "eruda-swain.min.js"
+    "eruda-config.js",
+    "eruda-config.js.map"
   ],
   "scripts": {
-    "build": "uglifyjs eruda-swain.js -o eruda-swain.min.js --mangle",
-    "lint": "eslint eruda-swain.js",
+    "dev": "webpack-dev-server --host 0.0.0.0 --mode development",
+    "build": "webpack --mode production",
     "ci": "npm run lint && npm run build",
-    "dev": "http-server"
+    "lint": "eslint src/**/*.js"
   },
   "keywords": [
     "eruda",
@@ -19,9 +18,22 @@
   ],
   "author": "",
   "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "@babel/core": "^7.21.3",
+    "babel-loader": "^9.1.2",
+    "@babel/plugin-transform-runtime": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "css-loader": "^3.4.2",
     "eruda": "^3.2.0",
-    "eslint": "^8.36.0",
-    "http-server": "^14.1.1",
-    "uglify-js": "^3.19.0"
+    "node-sass": "^8.0.0",
+    "postcss": "^8.4.21",
+    "postcss-class-prefix": "^0.3.0",
+    "postcss-loader": "^7.0.2",
+    "sass": "^1.77.8",
+    "sass-loader": "^14.2.1",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.12.0",
+    "eslint": "^8.57.0"
   }
 }

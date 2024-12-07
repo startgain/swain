@@ -62,12 +62,11 @@
     }
     </script>
     <!-- 引入插件 -->
-    <script src="eruda-swain.js"></script>
-    <script src="eruda-detail.js"></script>
+    <!-- <script src="eruda-swain.js"></script>
     <script>
         // 初始化 eruda，只显示需要的工具
         eruda.init({
-            tool: ['settings', 'detail', 'swain'],
+            tool: ['settings', 'swain'],  // 包含默认的 settings
             defaults: {
                 displaySize: 70,     // 面板高度占比
                 transparency: 0.9,    // 面板透明度
@@ -75,13 +74,19 @@
             }
         });
         
-        // 注册插件
+        // 初始化完成后注册插件
         eruda.add(erudaSwain);
-        eruda.add(erudaDetail);
         
-        // 默认显示 swain 面板
-        eruda.show('swain');
-    </script>
+        // 等待 DOM 加载完成后显示
+        setTimeout(() => {
+            eruda.show('swain');  // 显示指定面板
+            eruda.get('swain')._renderJson(eruda.get('swain')._$el);  // 手动触发渲染
+        }, 100);
+    </script> -->
+    <script src="node_modules/eruda/eruda.js"></script>
+    <script>eruda.init({tool: []});</script>
+    <script src="assets/eruda-config.js"></script>
+    <script>eruda.add(erudaConfig).show('config').show();</script>
 </head>
 <body>
     <!-- 页面内容 -->
