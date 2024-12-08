@@ -81,11 +81,12 @@
       display: inline-block;
       vertical-align: middle;
       opacity: 1;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease;
 
       &.no-desc {
-        opacity: 0.4;
+        opacity: 0.3;
         cursor: not-allowed;
+        pointer-events: none;
       }
     }
     .modal-overlay {

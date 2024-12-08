@@ -98,6 +98,11 @@ module.exports = function (eruda) {
         }
         
         if (target.classList.contains(prefix('detail-btn'))) {
+          // 如果按钮有no-desc类，直接返回
+          if (target.classList.contains(prefix('no-desc'))) {
+            return
+          }
+
           const path = target.getAttribute('data-path')
           const fieldInfo = self._fieldDetails[path]
           const existingModal = $.one(el, '.modal-overlay')
@@ -111,21 +116,12 @@ module.exports = function (eruda) {
           const modal = document.createElement('div')
           modal.className = prefix('detail-modal')
           
-          // 根据是否有字段说明显示不同的内容
-          if (fieldInfo) {
-            modal.innerHTML = prefixHTML(`
-              <div class="close-btn">×</div>
-              <div class="field-name">${fieldInfo.name}</div>
-              <div class="field-path">${path}</div>
-              <div class="field-desc">${fieldInfo.desc}</div>
-            `)
-          } else {
-            modal.innerHTML = prefixHTML(`
-              <div class="close-btn">×</div>
-              <div class="field-path">${path}</div>
-              <div class="field-desc no-desc">暂无字段介绍</div>
-            `)
-          }
+          modal.innerHTML = prefixHTML(`
+            <div class="close-btn">×</div>
+            <div class="field-name">${fieldInfo.name}</div>
+            <div class="field-path">${path}</div>
+            <div class="field-desc">${fieldInfo.desc}</div>
+          `)
           
           overlay.appendChild(modal)
           
@@ -215,7 +211,7 @@ module.exports = function (eruda) {
               ? null // 数组类型不需要单个input
               : $.one(modal, '.edit-input')
           
-          // 只在非布���类型和非数组类型时设置focus
+          // 只在非布尔类型和非数组类型时设置focus
           if (type !== 'boolean' && !Array.isArray(currentObj) && input) {
             input.focus()
           }
@@ -277,7 +273,7 @@ module.exports = function (eruda) {
 
             let obj = window
             
-            // 遍历路径直到倒��第二个部分
+            // 遍历路径直到倒第二个部分
             for (let i = 0; i < pathParts.length - 1; i++) {
               obj = obj[pathParts[i]]
             }
