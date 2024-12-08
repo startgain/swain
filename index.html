@@ -12,78 +12,8 @@
     </style>
     <!-- 引入 eruda -->
     <script src="node_modules/eruda/eruda.js"></script>
-    <script>
-    window.LOCAL_CONFIG = {
-        // 基础配置
-        apiUrl: 'https://api.example.com/v1',
-        debug: true,
-        env: 'development',
-        version: '1.0.0',
-        
-        // API配置
-        api: {
-            baseUrl: 'https://api.example.com',
-            timeout: 5000,
-            retryCount: 3,
-            maxConcurrent: 5
-        },
-        
-        // 功能开关
-        features: {
-            darkMode: true,
-            notification: false,
-            autoUpdate: true,
-            offlineMode: false
-        },
-        
-        // 安全配置
-        security: {
-            encryption: 'ssl',
-            tokenExpiry: 24,
-            passwordPolicy: 'strong',
-            maxLoginAttempts: 5
-        },
-        
-        // 性能配置
-        performance: {
-            caching: true,
-            compression: 'gzip',
-            lazyLoading: true,
-            preload: false
-        },
-        
-        // 界面配置
-        ui: {
-            theme: 'light',
-            language: 'zh-CN',
-            fontSize: 14,
-            animation: true
-        }
-    }
-    </script>
-    <!-- 引入插件 -->
-    <!-- <script src="eruda-swain.js"></script>
-    <script>
-        // 初始化 eruda，只显示需要的工具
-        eruda.init({
-            tool: ['settings', 'swain'],  // 包含默认的 settings
-            defaults: {
-                displaySize: 70,     // 面板高度占比
-                transparency: 0.9,    // 面板透明度
-                theme: 'Light'       // 主题
-            }
-        });
-        
-        // 初始化完成后注册插件
-        eruda.add(erudaSwain);
-        
-        // 等待 DOM 加载完成后显示
-        setTimeout(() => {
-            eruda.show('swain');  // 显示指定面板
-            eruda.get('swain')._renderJson(eruda.get('swain')._$el);  // 手动触发渲染
-        }, 100);
-    </script> -->
-    <script src="node_modules/eruda/eruda.js"></script>
+    <!-- 引入配置文件 -->
+    <script src="src/config.js"></script>
     <script>eruda.init({tool: []});</script>
     <script src="assets/eruda-config.js"></script>
     <script>eruda.add(erudaConfig).show('config').show();</script>

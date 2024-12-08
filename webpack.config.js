@@ -25,11 +25,9 @@ module.exports = (env, argv) => {
       library: ['erudaConfig'],
       libraryTarget: 'umd',
     },
-    configureWebpack: {
-      resolve: {
-        alias: {
-          '@': path.resolve(__dirname, 'src')
-        }
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src')
       }
     },
     module: {
@@ -71,13 +69,34 @@ module.exports = (env, argv) => {
                     }),
                     classPrefix('eruda-'),
                     autoprefixer,
+                    ['cssnano', {
+                      preset: ['default', {
+                        discardComments: {
+                          removeAll: true,
+                        },
+                      }],
+                    }],
                   ],
                 },
               },
             },
-            'sass-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                // 使用新的 API
+                api: 'modern'
+              }
+            },
           ],
         },
+        {
+          test: /\.svg$/,
+          // 移除 @svgr/webpack，改用简单的资源处理
+          type: 'asset/resource',
+          generator: {
+            filename: 'assets/[name][ext]'
+          }
+        }
       ],
     },
     plugins: [new webpack.BannerPlugin(banner)],

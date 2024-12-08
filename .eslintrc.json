@@ -4,7 +4,7 @@
     "es6": true,
     "amd": true,
     "commonjs": true,
-    "node": true
+    "node": true // 解决webpack.config.js中__dirname报错
   },
   "extends": "eslint:recommended",
   "rules": {
