@@ -6,13 +6,90 @@ module.exports = function (eruda) {
   const { prefix, prefixHTML, prefixSelector, $ } = require('./utils')
 
   class Config extends Tool {
-    constructor() {
-      super()
+    constructor(...args) {
+      super(...args)
       this.name = 'config'
       this._style = evalCss(require('./style.scss'))
+      this._fieldDetails = window.CONFIG_DETAILS || {}
+    }
+
+    _renderItem(key, value, path = '', isLast = true) {
+      const currentPath = path ? `${path}.${key}` : key
       
-      // 使用外部字段说明
-      this._fieldDetails = window.CONFIG_DETAILS
+      if (value === null) {
+        return prefixHTML(`
+          <div class="item">
+            <span class="key">${key}</span>: ${this._renderValue(value)}${isLast ? '' : ','}
+            <span class="goto-btn" data-path="${currentPath}"></span>
+            <span class="detail-btn ${this._fieldDetails[currentPath] ? '' : 'no-desc'}" data-path="${currentPath}"></span>
+          </div>
+        `)
+      }
+      
+      if (Array.isArray(value)) {
+        const items = value.map((v, i) => ({index: i, value: v}))
+        return prefixHTML(`
+          <div class="item">
+            <span class="expand-btn">▾</span>
+            <span class="key">${key}</span>: [
+            <div class="items">
+              ${items.map(({index, value: v}, i) => `
+                <div class="array-item">
+                  ${this._renderItem(index, v, currentPath, i === items.length - 1)}
+                  <button class="array-delete-btn" data-path="${currentPath}" data-index="${index}" title="删除此项">×</button>
+                </div>
+              `).join('')}
+            </div>
+            ]${isLast ? '' : ','} <button class="array-add-btn" data-path="${currentPath}" title="添加项">+</button>
+          </div>
+        `)
+      }
+
+      if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+        const items = Object.entries(value)
+        return prefixHTML(`
+          <div class="item">
+            <span class="expand-btn">▾</span>
+            <span class="key">${key}</span>: {
+            <div class="items">
+              ${items.map(([k, v], index) => `
+                <div class="object-item">
+                  ${this._renderItem(k, v, currentPath, index === items.length - 1)}
+                  <button class="object-delete-btn" data-path="${currentPath}" data-key="${k}" title="删除此项">×</button>
+                </div>
+              `).join('')}
+            </div>
+            }${isLast ? '' : ','} <button class="object-add-btn" data-path="${currentPath}" title="添加属性">+</button>
+          </div>
+        `)
+      }
+      
+      return prefixHTML(`
+        <div class="item">
+          <span class="key">${key}</span>: ${this._renderValue(value)}${isLast ? '' : ','}
+          <span class="goto-btn" data-path="${currentPath}"></span>
+          <span class="detail-btn ${this._fieldDetails[currentPath] ? '' : 'no-desc'}" data-path="${currentPath}"></span>
+        </div>
+      `)
+    }
+
+    _renderValue(value) {
+      if (value === null) {
+        return '<span class="value">null</span>'
+      }
+      if (typeof value === 'string') {
+        return `<span class="value string">"${value}"</span>`
+      }
+      if (typeof value === 'number') {
+        return `<span class="value number">${value}</span>`
+      }
+      if (typeof value === 'boolean') {
+        return `<span class="value boolean">${value}</span>`
+      }
+      if (Array.isArray(value)) {
+        return `<span class="value array">[${value.length} items]</span>`
+      }
+      return `<span class="value">${value}</span>`
     }
 
     init($el, container) {
@@ -24,67 +101,146 @@ module.exports = function (eruda) {
     }
 
     _renderJson($el) {
+      // 保存当前滚动位置
+      const scrollTop = $el[0].scrollTop
+
       const config = window.LOCAL_CONFIG || {}
-      const self = this
       
-      // 使用模板字符串定义完整的 HTML 结构
-      const renderValue = (value) => {
-        let valueHtml = ''
-        if (value === null) {
-          valueHtml = '<span class="value">null</span>'
-        } else if (typeof value === 'string') {
-          valueHtml = `<span class="value string">"${value}"</span>`
-        } else if (typeof value === 'boolean') {
-          valueHtml = `<span class="value boolean">${value}</span>`
-        } else if (typeof value === 'number') {
-          valueHtml = `<span class="value number">${value}</span>`
-        } else if (Array.isArray(value)) {
-          valueHtml = `<span class="value array">[${value.length} items]</span>`
-        } else {
-          valueHtml = `<span class="value">${value}</span>`
-        }
-        return valueHtml
-      }
-
-      const renderItem = (key, value, path = '', isLast = true) => {
-        console.log('🚀 ~ Config ~ renderItem ~ value:', value,Array.isArray(value)?'Array':typeof value === 'object'?'Object':'Other')
-        const currentPath = path ? `${path}.${key}` : key
-        
-        if (typeof value === 'object' && value !== null) {
-          const isArray = Array.isArray(value)
-          const items = Object.entries(value)
-          return prefixHTML(`
-            <div class="item">
-              <span class="expand-btn">▾</span>
-              <span class="key">${key}</span>: ${isArray ? '[' : '{'}
-              <div class="items">
-                ${items.map(([k, v], index) => renderItem(k, v, currentPath, index === items.length - 1)).join('')}
-              </div>
-              ${isArray ? ']' : '}'} ${isLast ? '' : ','}
-            </div>
-          `)
-        } else {
-          return prefixHTML(`
-            <div class="item">
-              <span class="key">${key}</span>: ${renderValue(value)}${isLast ? '' : ','}
-              <span class="goto-btn" data-path="${currentPath}"></span>
-              <span class="detail-btn ${self._fieldDetails[currentPath] ? '' : 'no-desc'}" data-path="${currentPath}"></span>
-            </div>
-          `)
-        }
-      }
-
-      let html = prefixHTML('<div class="json-tree">')
-      html += renderItem('LOCAL_CONFIG', config)
+      let html = prefixHTML('<div class="json-wrapper">')
+      html += prefixHTML('<div class="json-tree">')
+      html += this._renderItem('LOCAL_CONFIG', config)
+      html += '</div>'
       html += '</div>'
       $el.html(html)
+      
+      // 恢复滚动位置
+      $el[0].scrollTop = scrollTop
     }
 
     _bindEvent(el) {
-      const self = this
-      
       el.addEventListener('click', (e) => {
         const target = e.target
+
+        // 处理数组添加按钮
+        if (target.classList.contains(prefix('array-add-btn'))) {
+          const path = target.getAttribute('data-path')
+          const pathParts = path.split('.')
+          let currentObj = window
+          
+          // 获取数组对象
+          for (const part of pathParts) {
+            if (currentObj && typeof currentObj === 'object') {
+              currentObj = currentObj[part]
+            }
+          }
+
+          // 添加新项
+          if (Array.isArray(currentObj)) {
+            // 创建类型选择弹窗
+            const existingModal = $.one(el, '.modal-overlay')
+            if (existingModal) {
+              existingModal.remove()
+            }
+
+            const overlay = document.createElement('div')
+            overlay.className = prefix('modal-overlay')
+            
+            const modal = document.createElement('div')
+            modal.className = prefix('detail-modal')
+            modal.innerHTML = prefixHTML(`
+              <div class="close-btn">×</div>
+              <div class="field-name">选择要添加的数据类型</div>
+              <div class="type-selector">
+                <button class="type-btn" data-type="string">字符串</button>
+                <button class="type-btn" data-type="number">数字</button>
+                <button class="type-btn" data-type="boolean">布尔值</button>
+                <button class="type-btn" data-type="array">数组</button>
+                <button class="type-btn" data-type="object">对象</button>
+              </div>
+            `)
+            
+            overlay.appendChild(modal)
+            
+            // 绑定类型选择事件
+            const typeSelector = $.one(modal, '.type-selector')
+            typeSelector.addEventListener('click', (e) => {
+              if (e.target.classList.contains(prefix('type-btn'))) {
+                const type = e.target.getAttribute('data-type')
+                let newItem
+                
+                switch(type) {
+                case 'string':
+                  newItem = ''
+                  break
+                case 'number':
+                  newItem = 0
+                  break
+                case 'boolean':
+                  newItem = false
+                  break
+                case 'array':
+                  newItem = []
+                  break
+                case 'object':
+                  newItem = {}
+                  break
+                }
+                
+                currentObj.push(newItem)
+                const parentItem = target.closest(prefixSelector('.item'))
+                const arrayItems = $.one(parentItem, '.items')
+                const newItemHtml = prefixHTML(`
+                  <div class="array-item">
+                    ${this._renderItem(currentObj.length - 1, newItem, path, true)}
+                    <button class="array-delete-btn" data-path="${path}" data-index="${currentObj.length - 1}" title="删除此项">×</button>
+                  </div>
+                `)
+                arrayItems.insertAdjacentHTML('beforeend', newItemHtml)
+                overlay.remove()
+              }
+            })
+            
+            overlay.addEventListener('click', (e) => {
+              if (e.target === overlay || e.target.classList.contains(prefix('close-btn'))) {
+                overlay.remove()
+              }
+            })
+            
+            el.appendChild(overlay)
+          }
+          e.stopPropagation()
+        }
+
+        // 处理数组删除按钮
+        if (target.classList.contains(prefix('array-delete-btn'))) {
+          const path = target.getAttribute('data-path')
+          const index = parseInt(target.getAttribute('data-index'))
+          const pathParts = path.split('.')
+          let currentObj = window
+          
+          // 获取数组对象
+          for (const part of pathParts) {
+            if (currentObj && typeof currentObj === 'object') {
+              currentObj = currentObj[part]
+            }
+          }
+
+          // 删除项
+          if (Array.isArray(currentObj) && index >= 0 && index < currentObj.length) {
+            currentObj.splice(index, 1)
+            // 删除DOM元素
+            const arrayItem = target.closest(prefixSelector('.array-item'))
+            arrayItem.remove()
+            // 更新后续项的索引
+            const items = $.all(el, `[data-path="${path}"].array-delete-btn`)
+            items.forEach((item, i) => {
+              item.setAttribute('data-index', i)
+            })
+          }
+          e.stopPropagation()
+        }
+
+        // 处理展开/折叠按钮
         if (target.classList.contains(prefix('expand-btn'))) {
           const item = target.closest(prefixSelector('.item'))
           if (item.classList.contains(prefix('collapsed'))) {
@@ -98,13 +254,13 @@ module.exports = function (eruda) {
         }
         
         if (target.classList.contains(prefix('detail-btn'))) {
-          // 如果按钮有no-desc类，直接返回
+          // 如果按钮no-desc类，直接返回
           if (target.classList.contains(prefix('no-desc'))) {
             return
           }
 
           const path = target.getAttribute('data-path')
-          const fieldInfo = self._fieldDetails[path]
+          const fieldInfo = this._fieldDetails[path]
           const existingModal = $.one(el, '.modal-overlay')
           if (existingModal) {
             existingModal.remove()
@@ -140,7 +296,7 @@ module.exports = function (eruda) {
           const pathParts = path.split('.')
           let currentObj = window
           
-          // 遍历路径获取前值
+          // 路径获取前值
           for (const part of pathParts) {
             if (currentObj && typeof currentObj === 'object') {
               currentObj = currentObj[part]
@@ -211,7 +367,7 @@ module.exports = function (eruda) {
               ? null // 数组类型不需要单个input
               : $.one(modal, '.edit-input')
           
-          // 只在非布尔类型和非数组类型时设置focus
+          // 只在非布尔类型和非数组型时设置focus
           if (type !== 'boolean' && !Array.isArray(currentObj) && input) {
             input.focus()
           }
@@ -309,9 +465,21 @@ module.exports = function (eruda) {
               }
               
               obj[lastPart] = parsedValue
+              
+              // 更新DOM显示
+              const item = target.closest(prefixSelector('.item'))
+              const valueSpan = $.one(item, '.value')
+              if (valueSpan) {
+                if (typeof parsedValue === 'string') {
+                  valueSpan.textContent = `"${parsedValue}"`
+                } else if (Array.isArray(parsedValue)) {
+                  valueSpan.textContent = `[${parsedValue.length} items]`
+                } else {
+                  valueSpan.textContent = parsedValue
+                }
+              }
+              
               overlay.remove()
-              // 重新渲染JSON树
-              self._renderJson(self._$el)
             } catch (err) {
               console.error('Failed to update value:', err)
             }
@@ -325,6 +493,140 @@ module.exports = function (eruda) {
           })
 
           el.appendChild(overlay)
+          e.stopPropagation()
+        }
+
+        // 处理对象添加按钮
+        if (target.classList.contains(prefix('object-add-btn'))) {
+          const path = target.getAttribute('data-path')
+          const pathParts = path.split('.')
+          let currentObj = window
+          
+          // 获取对象
+          for (const part of pathParts) {
+            if (currentObj && typeof currentObj === 'object') {
+              currentObj = currentObj[part]
+            }
+          }
+
+          // 添加新属性
+          if (typeof currentObj === 'object' && !Array.isArray(currentObj)) {
+            // 创建属性添加弹窗
+            const existingModal = $.one(el, '.modal-overlay')
+            if (existingModal) {
+              existingModal.remove()
+            }
+
+            const overlay = document.createElement('div')
+            overlay.className = prefix('modal-overlay')
+            
+            const modal = document.createElement('div')
+            modal.className = prefix('detail-modal')
+            modal.innerHTML = prefixHTML(`
+              <div class="close-btn">×</div>
+              <div class="field-name">添加新属性</div>
+              <div class="property-form">
+                <div class="form-group">
+                  <label>属性名：</label>
+                  <input type="text" class="property-name" placeholder="输入属性名">
+                </div>
+                <div class="form-group">
+                  <label>值类型：</label>
+                  <div class="type-selector">
+                    <button class="type-btn" data-type="string">字符串</button>
+                    <button class="type-btn" data-type="number">数字</button>
+                    <button class="type-btn" data-type="boolean">布尔值</button>
+                    <button class="type-btn" data-type="array">数组</button>
+                    <button class="type-btn" data-type="object">对象</button>
+                  </div>
+                </div>
+              </div>
+            `)
+            
+            overlay.appendChild(modal)
+            
+            // 绑定类型选择事件
+            const typeSelector = $.one(modal, '.type-selector')
+            typeSelector.addEventListener('click', (e) => {
+              if (e.target.classList.contains(prefix('type-btn'))) {
+                const type = e.target.getAttribute('data-type')
+                const propertyName = $.one(modal, '.property-name').value.trim()
+                
+                if (!propertyName) {
+                  alert('请输入属性名')
+                  return
+                }
+
+                if (Object.hasOwn(currentObj, propertyName)) {
+                  alert('属性名已存在')
+                  return
+                }
+
+                let newValue
+                switch(type) {
+                case 'string':
+                  newValue = ''
+                  break
+                case 'number':
+                  newValue = 0
+                  break
+                case 'boolean':
+                  newValue = false
+                  break
+                case 'array':
+                  newValue = []
+                  break
+                case 'object':
+                  newValue = {}
+                  break
+                }
+                
+                currentObj[propertyName] = newValue
+                const parentItem = target.closest(prefixSelector('.item'))
+                const objectItems = $.one(parentItem, '.items')
+                const newPropertyHtml = prefixHTML(`
+                  <div class="object-item">
+                    ${this._renderItem(propertyName, newValue, path, true)}
+                    <button class="object-delete-btn" data-path="${path}" data-key="${propertyName}" title="删除此项">×</button>
+                  </div>
+                `)
+                objectItems.insertAdjacentHTML('beforeend', newPropertyHtml)
+                overlay.remove()
+              }
+            })
+            
+            overlay.addEventListener('click', (e) => {
+              if (e.target === overlay || e.target.classList.contains(prefix('close-btn'))) {
+                overlay.remove()
+              }
+            })
+            
+            el.appendChild(overlay)
+          }
+          e.stopPropagation()
+        }
+
+        // 处理对象删除按钮
+        if (target.classList.contains(prefix('object-delete-btn'))) {
+          const path = target.getAttribute('data-path')
+          const key = target.getAttribute('data-key')
+          const pathParts = path.split('.')
+          let currentObj = window
+          
+          // 获取对象
+          for (const part of pathParts) {
+            if (currentObj && typeof currentObj === 'object') {
+              currentObj = currentObj[part]
+            }
+          }
+
+          // 删除属性
+          if (typeof currentObj === 'object' && !Array.isArray(currentObj)) {
+            delete currentObj[key]
+            // 删除DOM元素
+            const objectItem = target.closest(prefixSelector('.object-item'))
+            objectItem.remove()
+          }
           e.stopPropagation()
         }
       })

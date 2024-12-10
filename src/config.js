@@ -76,9 +76,9 @@ window.LOCAL_CONFIG = {
     enabled: true,
     maxAge: 3600,
     excludes: [
-      '/api/realtime/*',
-      '/api/stream/*',
-      '/api/websocket/*'
+      // '/api/realtime/*',
+      // '/api/stream/*',
+      // '/api/websocket/*'
     ]
   },
     

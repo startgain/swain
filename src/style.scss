@@ -1,16 +1,34 @@
 .config {
     padding: 10px;
     font-family: monospace;
-    overflow-y: auto;
-    height: 100%;
     position: relative;
+    height: 100%;
+    
+    .json-wrapper {
+      height: 100%;
+      overflow-y: auto;
+    }
     
     .json-tree {
       background: #fff;
       color: #263238;
-      height: 100%;
-      overflow: auto;
     }
+    
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
     .item {
       padding: 3px 0 3px 22px;
       position: relative;
@@ -49,6 +67,7 @@
       font-family: "Courier New", Courier, monospace;
       color: #666;
       transition: transform 0.15s ease;
+      transform: rotate(90deg);
     }
     .collapsed {
       > .expand-btn {
@@ -89,20 +108,6 @@
         pointer-events: none;
       }
     }
-    .modal-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 20px;
-      box-sizing: border-box;
-    }
     .detail-modal {
       background: #fff;
       padding: 15px;
@@ -110,10 +115,10 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
       width: 80%;
       max-width: 500px;
-      max-height: calc(100% - 40px);
+      max-height: calc(100vh - 100px);
       position: relative;
-      overflow-y: auto;
       margin: auto;
+      overflow-y: auto;
       
       .field-name {
         font-weight: bold;
@@ -149,11 +154,11 @@
       .array-editor {
         .array-items {
           margin-bottom: 10px;
-          max-height: 200px;
-          overflow-y: auto;
           border: 1px solid #eee;
           border-radius: 4px;
           padding: 10px;
+          max-height: 200px;
+          overflow-y: auto;
         }
         
         .array-item {
@@ -280,6 +285,172 @@
 
       .toggle-input:checked + .switch-slider:before {
         transform: translateX(20px);
+      }
+    }
+
+    .array-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .array-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      .array-delete-btn {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        border: none;
+        background: #f5f5f5;
+        color: #666;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          background: #ff4444;
+          color: white;
+        }
+      }
+    }
+
+    .array-add-btn {
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: none;
+      background: #f5f5f5;
+      color: #666;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.2s ease;
+      margin-left: 8px;
+      vertical-align: middle;
+      
+      &:hover {
+        background: #4CAF50;
+        color: white;
+      }
+    }
+
+    .type-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+      
+      .type-btn {
+        flex: 1;
+        min-width: 100px;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #f5f5f5;
+        color: #333;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          background: #e0e0e0;
+          border-color: #2196f3;
+          color: #2196f3;
+        }
+        
+        &:active {
+          background: #d0d0d0;
+          transform: translateY(1px);
+        }
+      }
+    }
+
+    .object-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      .object-delete-btn {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        border: none;
+        background: #f5f5f5;
+        color: #666;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          background: #ff4444;
+          color: white;
+        }
+      }
+    }
+
+    .object-add-btn {
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: none;
+      background: #f5f5f5;
+      color: #666;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.2s ease;
+      margin-left: 8px;
+      vertical-align: middle;
+      
+      &:hover {
+        background: #4CAF50;
+        color: white;
+      }
+    }
+
+    .property-form {
+      margin-top: 15px;
+      
+      .form-group {
+        margin-bottom: 15px;
+        
+        label {
+          display: block;
+          margin-bottom: 5px;
+          color: #666;
+          font-size: 12px;
+        }
+        
+        .property-name {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 12px;
+          
+          &:focus {
+            outline: none;
+            border-color: #2196f3;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+          }
+        }
       }
     }
   }
