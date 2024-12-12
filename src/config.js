@@ -81,7 +81,7 @@ window.LOCAL_CONFIG = {
       // '/api/websocket/*'
     ]
   },
-    
+  name: 'config',
   // 插件配置
   plugins: [
     {
