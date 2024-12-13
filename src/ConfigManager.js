@@ -2,8 +2,12 @@ const $ = require('./utils')
 
 class ConfigManager {
   constructor() {
-    this._config = window.LOCAL_CONFIG || {}
-    this._fieldDetails = window.CONFIG_DETAILS || {}
+    this.registerSettings()
+  }
+
+  registerSettings(config = {}, fieldDetails = {}) {
+    this._config = config
+    this._fieldDetails = fieldDetails
   }
 
   // 获取配置值

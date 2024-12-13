@@ -12,11 +12,16 @@
     </style>
     <!-- 引入 eruda -->
     <script src="node_modules/eruda/eruda.js"></script>
+
     <!-- 引入配置文件 -->
     <script src="src/config.js"></script>
     <script>eruda.init({tool: []});</script>
     <script src="assets/eruda-config.js"></script>
-    <script>eruda.add(erudaConfig).show('config').show();</script>
+    <script>
+        eruda.add(erudaConfig).show('config').show();
+        // 初始化并注入配置
+        eruda.erudaConfig.registerSettings(window.LOCAL_CONFIG,window.CONFIG_DETAILS)
+    </script>
 </head>
 <body>
     <!-- 页面内容 -->

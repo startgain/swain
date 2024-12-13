@@ -90,7 +90,6 @@ class DomRenderer {
       <div class="item">
         <span class="expand-btn">▾</span>
         <span class="key">${$.escape(key)}</span>: [
-        <span class="array-add-btn" data-path="${path}">+</span>
         ${showDeleteBtn ? `<span class="${deleteButtonClass}" data-path="${parentPath.split('.').slice(0, -1).join('.')}" ${deleteButtonAttr}="${key}">×</span>` : ''}
         <div class="items">
           ${items.map(({index, value: v}, i) => {
@@ -110,8 +109,9 @@ class DomRenderer {
               </div>
             `
   }).join('')}
-        </div>
-        ]${isLast ? '' : ','}
+  </div>
+  ]${isLast ? '' : ','}
+  <span class="array-add-btn" data-path="${path}">+</span>
       </div>
     `)
   }
@@ -130,7 +130,6 @@ class DomRenderer {
       <div class="item">
         <span class="expand-btn">▾</span>
         <span class="key">${$.escape(key)}</span>: {
-        <span class="object-add-btn" data-path="${path}">+</span>
         ${showDeleteBtn ? `<span class="${deleteButtonClass}" data-path="${parentPath.split('.').slice(0, -1).join('.')}" ${deleteButtonAttr}="${key}">×</span>` : ''}
         <div class="items">
           ${items.map(([k, v], index) => {
@@ -150,8 +149,9 @@ class DomRenderer {
               </div>
             `
   }).join('')}
-        </div>
-        }${isLast ? '' : ','}
+  </div>
+  }${isLast ? '' : ','}
+  <span class="object-add-btn" data-path="${path}">+</span>
       </div>
     `)
   }
