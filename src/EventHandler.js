@@ -14,6 +14,9 @@ class EventHandler {
   // 处理点击事件
   _handleClick(e) {
     const target = e.target
+    if (target.classList.contains($.prefix('toggle-btn'))) {
+      this._toggleConfigDisplay(target)
+    }
     const handlers = {
       'array-add-btn': () => this._handleArrayAdd(target),
       'array-delete-btn': () => this._handleArrayDelete(target),
@@ -31,6 +34,14 @@ class EventHandler {
         e.stopPropagation()
         break
       }
+    }
+  }
+
+  // 切换配置显示
+  _toggleConfigDisplay(button) {
+    const configContent = button.closest($.prefixSelector('.config-group')).querySelector($.prefixSelector('.config-content'))
+    if (configContent) {
+      configContent.style.display = configContent.style.display === 'none' ? 'block' : 'none'
     }
   }
 
@@ -220,7 +231,6 @@ class EventHandler {
   _createDetailView(path, fieldInfo) {
     return $.prefixHTML(`
       <div class="close-btn">×</div>
-      <div class="field-name">${fieldInfo.name}</div>
       <div class="field-path">${path}</div>
       <div class="field-desc">${fieldInfo.desc}</div>
     `)

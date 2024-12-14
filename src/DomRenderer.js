@@ -161,7 +161,17 @@ class DomRenderer {
     const configs = this._configManager._configs
     const itemsHtml = configs.map(config => {
       const key = config.id
-      return this.renderItem(key, config.config)
+      const configClass = `config-${key}`
+      return $.prefixHTML(`
+        <div class="config-group ${configClass}">
+          <button class="toggle-btn" data-config-id="${key}">
+            ${key}
+          </button>
+          <div class="config-content">
+            ${this.renderItem(key, config.config)}
+          </div>
+        </div>
+      `)
     }).join('')
 
     const html = $.prefixHTML('<div class="json-wrapper">')
