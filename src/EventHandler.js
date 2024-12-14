@@ -88,17 +88,11 @@ class EventHandler {
       
       // 更新后续项的索引
       if (parentNode) {
-        const items = $.all(parentNode, $.prefixSelector('.array-item'))
-        items.forEach((item, i) => {
-          const deleteBtn = $.one(item, '.array-delete-btn')
-          if (deleteBtn) {
-            deleteBtn.setAttribute('data-index', i)
-          }
-          const keySpan = $.one(item, '.key')
-          if (keySpan) {
-            keySpan.textContent = i
-          }
-        })
+        const array = this._configManager.getValue(path.replace(/\.\d+$/, ''))
+        const key = path.split('.').slice(-1)[0]
+        const newArrayHtml = this._domRenderer._renderArrayItem(key, array, path, true)
+        parentNode.parentNode.outerHTML = newArrayHtml
+       
       }
     }
   }
