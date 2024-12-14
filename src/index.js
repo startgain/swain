@@ -33,14 +33,10 @@ module.exports = function(eruda) {
     }
     
     // 更新配置和字段说明
-    registerSettings(config, fieldDetails) {
-
-      this._configManager.registerSettings(config,fieldDetails)
-        
-
+    registerSettings(configs) {
+      this._configManager.registerSettings(configs)
       // 重新渲染视图
       this._domRenderer.renderTree(this._el)
-      
       return this
     }
   }

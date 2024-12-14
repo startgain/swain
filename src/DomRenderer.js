@@ -55,9 +55,9 @@ class DomRenderer {
 
   // 渲染简单类型项
   _renderSimpleItem(key, value, path, isLast) {
-    const showDeleteBtn = path !== 'LOCAL_CONFIG'
-    const parentPath = path === 'LOCAL_CONFIG' ? 'LOCAL_CONFIG' : path
-    const parentValue = this._configManager.getValue(parentPath.split('.').slice(0, -1).join('.'))
+    const showDeleteBtn = path.split('.').length > 1
+    const parentPath = path.split('.').slice(0, -1).join('.')
+    const parentValue = this._configManager.getValue(parentPath)
     const isInArray = Array.isArray(parentValue)
     const deleteButtonClass = isInArray ? 'array-delete-btn' : 'object-delete-btn'
     const deleteButtonAttr = isInArray ? 'data-index' : 'data-key'
@@ -71,7 +71,7 @@ class DomRenderer {
         <span class="key">${$.escape(key)}</span>: ${this.renderValue(value)}${isLast ? '' : ','}
         <span class="goto-btn" data-path="${path}"></span>
         <span class="detail-btn ${this._configManager.hasFieldDetails(path) ? '' : 'no-desc'}" data-path="${path}"></span>
-        ${showDeleteBtn ? `<span class="${deleteButtonClass}" data-path="${parentPath.split('.').slice(0, -1).join('.')}" ${deleteButtonAttr}="${key}">×</span>` : ''}
+        ${showDeleteBtn ? `<span class="${deleteButtonClass}" data-path="${parentPath}" ${deleteButtonAttr}="${key}">×</span>` : ''}
       </div>
     `)
   }
@@ -79,9 +79,9 @@ class DomRenderer {
   // 渲染数组类型项
   _renderArrayItem(key, value, path, isLast) {
     const items = value.map((v, i) => ({index: i, value: v}))
-    const showDeleteBtn = path !== 'LOCAL_CONFIG'
-    const parentPath = path === 'LOCAL_CONFIG' ? 'LOCAL_CONFIG' : path
-    const parentValue = this._configManager.getValue(parentPath.split('.').slice(0, -1).join('.'))
+    const showDeleteBtn = path.split('.').length > 1
+    const parentPath = path.split('.').slice(0, -1).join('.')
+    const parentValue = this._configManager.getValue(parentPath)
     const isInArray = Array.isArray(parentValue)
     const deleteButtonClass = isInArray ? 'array-delete-btn' : 'object-delete-btn'
     const deleteButtonAttr = isInArray ? 'data-index' : 'data-key'
@@ -90,7 +90,7 @@ class DomRenderer {
       <div class="item">
         <span class="expand-btn">▾</span>
         <span class="key">${$.escape(key)}</span>: [
-        ${showDeleteBtn ? `<span class="${deleteButtonClass}" data-path="${parentPath.split('.').slice(0, -1).join('.')}" ${deleteButtonAttr}="${key}">×</span>` : ''}
+        ${showDeleteBtn ? `<span class="${deleteButtonClass}" data-path="${parentPath}" ${deleteButtonAttr}="${key}">×</span>` : ''}
         <div class="items">
           ${items.map(({index, value: v}, i) => {
     const itemPath = `${path}.${index}`
@@ -119,9 +119,9 @@ class DomRenderer {
   // 渲染对象类型项
   _renderObjectItem(key, value, path, isLast) {
     const items = Object.entries(value)
-    const showDeleteBtn = path !== 'LOCAL_CONFIG'
-    const parentPath = path === 'LOCAL_CONFIG' ? 'LOCAL_CONFIG' : path
-    const parentValue = this._configManager.getValue(parentPath.split('.').slice(0, -1).join('.'))
+    const showDeleteBtn = path.split('.').length > 1
+    const parentPath = path.split('.').slice(0, -1).join('.')
+    const parentValue = this._configManager.getValue(parentPath)
     const isInArray = Array.isArray(parentValue)
     const deleteButtonClass = isInArray ? 'array-delete-btn' : 'object-delete-btn'
     const deleteButtonAttr = isInArray ? 'data-index' : 'data-key'
@@ -130,7 +130,7 @@ class DomRenderer {
       <div class="item">
         <span class="expand-btn">▾</span>
         <span class="key">${$.escape(key)}</span>: {
-        ${showDeleteBtn ? `<span class="${deleteButtonClass}" data-path="${parentPath.split('.').slice(0, -1).join('.')}" ${deleteButtonAttr}="${key}">×</span>` : ''}
+        ${showDeleteBtn ? `<span class="${deleteButtonClass}" data-path="${parentPath}" ${deleteButtonAttr}="${key}">×</span>` : ''}
         <div class="items">
           ${items.map(([k, v], index) => {
     const itemPath = `${path}.${k}`
@@ -158,9 +158,15 @@ class DomRenderer {
 
   // 渲染整个配置树
   renderTree($el) {
+    const configs = this._configManager._configs
+    const itemsHtml = configs.map(config => {
+      const key = config.id
+      return this.renderItem(key, config.config)
+    }).join('')
+
     const html = $.prefixHTML('<div class="json-wrapper">')
       + $.prefixHTML('<div class="json-tree">')
-      + this.renderItem('LOCAL_CONFIG', this._configManager._config)
+      + itemsHtml
       + '</div></div>'
     $el.html(html)
   }

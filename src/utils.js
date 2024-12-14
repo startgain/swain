@@ -78,16 +78,13 @@ const $ = {
   },
   // 获取对象的值
   getValueByPath: (obj, path) => {
-    if (path === 'LOCAL_CONFIG') {
+    if (path === '') {
       return obj
-    }
-    if (path.startsWith('LOCAL_CONFIG.')) {
-      path = path.slice('LOCAL_CONFIG.'.length)
     }
     const parts = path.split('.')
     let current = obj
     for (const part of parts) {
-      if (current && typeof current === 'object') {
+      if (current && typeof current === 'object' && part) {
         current = current[part]
       } else {
         return undefined
@@ -97,11 +94,8 @@ const $ = {
   },
   // 设置对象的值
   setValueByPath: (obj, path, value) => {
-    if (path === 'LOCAL_CONFIG') {
+    if (path === '') {
       return
-    }
-    if (path.startsWith('LOCAL_CONFIG.')) {
-      path = path.slice('LOCAL_CONFIG.'.length)
     }
     const parts = path.split('.')
     let current = obj

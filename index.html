@@ -20,7 +20,11 @@
     <script>
         eruda.add(erudaConfig).show('config').show();
         // 初始化并注入配置
-        eruda.erudaConfig.registerSettings(window.LOCAL_CONFIG,window.CONFIG_DETAILS)
+        eruda.erudaConfig.registerSettings([[window.LOCAL_CONFIG,window.CONFIG_DETAILS,'config'], [{personal:{name:'zhangsan'}},{},'setting']])
+        // eruda.erudaConfig.registerSettings([
+        //     [{personal:{name:'lisi'}},{},'config'], 
+        //     [{personal:{name:'zhangsan'}},{},'setting']
+        // ])
     </script>
 </head>
 <body>
