@@ -118,6 +118,7 @@ class DomRenderer {
 
   // 渲染对象类型项
   _renderObjectItem(key, value, path, isLast, routeMapConfig=[]) {
+    console.log('🚀 ~ DomRenderer ~ _renderObjectItem ~ routeMapConfig:', routeMapConfig)
     const items = Object.entries(value)
     // 对items进行排序
     if(routeMapConfig.length>0){
@@ -143,9 +144,8 @@ class DomRenderer {
     const isInArray = Array.isArray(parentValue)
     const deleteButtonClass = isInArray ? 'array-delete-btn' : 'object-delete-btn'
     const deleteButtonAttr = isInArray ? 'data-index' : 'data-key'
-    
     return $.prefixHTML(`
-      <div class="item">
+      <div class="${routeMapConfig.includes(key) ? 'item sort-field' : 'item'}">
         <span class="expand-btn">▾</span>
         <span class="key">${$.escape(key)}</span>: {
         ${showDeleteBtn ? `<span class="${deleteButtonClass}" data-path="${parentPath}" ${deleteButtonAttr}="${key}">×</span>` : ''}
@@ -156,10 +156,10 @@ class DomRenderer {
     if (isObject) {
       return Array.isArray(v)
         ? this._renderArrayItem(k, v, itemPath, index === items.length - 1)
-        : this._renderObjectItem(k, v, itemPath, index === items.length - 1)
+        : this._renderObjectItem(k, v, itemPath, index === items.length - 1, routeMapConfig)
     }
     return `
-              <div class="object-item">
+              <div class="${routeMapConfig.includes(k) ? 'object-item sort-field' : 'object-item'}">
                 <span class="key">${$.escape(k)}</span>: ${this.renderValue(v)}${index === items.length - 1 ? '' : ','}
                 <span class="goto-btn" data-path="${itemPath}"></span>
                 <span class="detail-btn ${this._configManager.hasFieldDetails(itemPath) ? '' : 'no-desc'}" data-path="${itemPath}"></span>
