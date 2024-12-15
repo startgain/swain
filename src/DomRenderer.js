@@ -35,7 +35,7 @@ class DomRenderer {
   }
 
   // 渲染单个项
-  renderItem(key, value, path = '', isLast = true) {
+  renderItem(key, value, path = '', isLast = true, routeMapConfig = []) {
     const currentPath = path ? `${path}.${key}` : key
     
     if (value === null) {
@@ -47,7 +47,7 @@ class DomRenderer {
     }
     
     if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
-      return this._renderObjectItem(key, value, currentPath, isLast)
+      return this._renderObjectItem(key, value, currentPath, isLast, routeMapConfig)
     }
     
     return this._renderSimpleItem(key, value, currentPath, isLast)
@@ -117,8 +117,26 @@ class DomRenderer {
   }
 
   // 渲染对象类型项
-  _renderObjectItem(key, value, path, isLast) {
+  _renderObjectItem(key, value, path, isLast, routeMapConfig=[]) {
     const items = Object.entries(value)
+    // 对items进行排序
+    if(routeMapConfig.length>0){
+      const sortFields = routeMapConfig
+      items.sort((a, b) => {
+        const indexA = sortFields.indexOf(a[0]) 
+        const indexB = sortFields.indexOf(b[0])
+        
+        // 如果两个元素都不在sortFields中，保持原顺序
+        if (indexA === -1 && indexB === -1) return 1
+        // 如果只有a不在sortFields中，a应该排在后面
+        if (indexA === -1) return 1
+        // 如果只有b不在sortFields中，b应该排在后面
+        if (indexB === -1) return -1
+        // 如果两个元素都在sortFields中，按照在sortFields中的顺序排序
+        return indexA - indexB
+      })
+    }
+    
     const showDeleteBtn = path.split('.').length > 1
     const parentPath = path.split('.').slice(0, -1).join('.')
     const parentValue = this._configManager.getValue(parentPath)
@@ -159,16 +177,18 @@ class DomRenderer {
   // 渲染整个配置树
   renderTree($el) {
     const configs = this._configManager._configs
+    const hash = location.hash.slice(2)
     const itemsHtml = configs.map(config => {
       const key = config.id
       const configClass = `config-${key}`
+      const routeMapConfig = hash ? (config.routeMapConfig[hash] || []) : []
       return $.prefixHTML(`
         <div class="config-group ${configClass}">
           <button class="toggle-btn" data-config-id="${key}">
             ${key}
           </button>
           <div class="config-content">
-            ${this.renderItem(key, config.config)}
+            ${this.renderItem(key, config.config,'',true, routeMapConfig)}
           </div>
         </div>
       `)

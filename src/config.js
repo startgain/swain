@@ -53,7 +53,7 @@ window.LOCAL_CONFIG = {
   IS_OPEN_SMART_ORDER: false, // 智能下单默认开启/关闭
   IS_OPEN_STRATEGY_BLACKLIST: true, // 是否开启策略黑白名单
   IS_ONLY_SHOW_PERMISSIBLE_STRATEGY: false, //是否仅展示被许可的策略,该开关依赖IS_OPEN_STRATEGY_BLACKLIST配置项，该配置项打开后才进行本配置项逻辑  true 进行用户黑名单策略过滤 ,false 不进行用户黑名单策略过滤； 默认false，不进行用户黑名单策略过滤
-  IS_OPEN_STOCK_BLACKLIST: false, // 是否开��证券黑白名单
+  IS_OPEN_STOCK_BLACKLIST: false, // 是否开启证券黑白名单
   IS_OPEN_MEMBER_LEVEL_CHECK: false, // 是否开启会员管理校验
   HAS_CONFIRM_WAY: ['1', '3'], // 触发类型配置列表: 1-自动下单；2-提醒；3-手动下单；
   EXPIRED_DATE: [4, 19, 59, 364], // 截止日期快捷选项配置
@@ -75,7 +75,7 @@ window.LOCAL_CONFIG = {
     GZNHG: '15:30:00', // 国债逆回购截止时间
     GZNHG_SUFFIX: ' 15:30', // 国债逆回购时间后缀(带空格)
     ZNGZNHG: '15:25:00', // 智能国债逆回购截止时间
-    ZNGZNHG_SUFFIX: ' 15:25', // 智能国债逆回购时间后��(带空格)
+    ZNGZNHG_SUFFIX: ' 15:25', // 智能国债逆回购时间后缀(带空格)
     ZNDX_START: '09:30', // 智能打新开始时间
     ZNDX_END: '14:57', // 智能打新截止时间
     ZNDX_DEFAULT: '10:00', // 智能打新默认选择时间
@@ -97,7 +97,7 @@ window.LOCAL_CONFIG = {
     JZJ_UP_HIGH: 999.99, // 网格交易较基准价涨幅上限(包含)
     JZJ_UP_LOW: 0.5, // 网格交易较基准价涨幅下限(包含)
     JZJ_DOWN_HIGH: 99.99, // 网格交易较基准价跌幅上限(包含)
-    JZJ_DOWN_LOW: 0.5, // 网格交易较基准价���幅下限(包含)
+    JZJ_DOWN_LOW: 0.5, // 网格交易较基准价跌幅下限(包含)
     RZDF_ZFBFB_LOW: 0.5, // 日涨跌幅涨幅百分比下限(包含)
     RZDF_ZFBFB_HIGH: 999.99, // 日涨跌幅涨幅百分比上限(包含)
     RZDF_DFBFB_LOW: 0.5, // 日涨跌幅跌幅百分比下限(包含)
@@ -218,7 +218,7 @@ window.LOCAL_CONFIG = {
     // 错误文本
     F: '交易密码错误',
     S: '[current_price]',
-    T: '用��登录信息过期或者失效',
+    T: '用户登录信息过期或者失效',
     T2: '重新登录',
     T3: '用户信息不存在',
     T4: '登录过期或在其他终端发生登录',
@@ -575,4 +575,410 @@ window.CONFIG_DETAILS = {
       example: '已否决'
     }
   }
+}
+
+window.PERSONALIZE_SETTING = {
+  'mainThemeColor': '#FA4747',
+  'strategyTextMapConfig': {
+    '8': {
+      'name': '定价买入'
+    }
+  },
+  'strategyFilterConfig': {},
+  'defaultFilterConfig': {
+    'maxDate': 364,
+    'startDate': '2024-11-16T10:06:01.306Z',
+    'endDate': '2024-12-15T10:06:01.306Z'
+  },
+  'historyCellColorConfig': {
+    'title': '#666',
+    'value': '#333',
+    'typeColor': '#FA4747'
+  },
+  'historyCellFieldConfig': {
+    'jkz': [
+      'tjdh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtlx',
+      'wtfx',
+      'jzrq',
+      'cjsj',
+      'xdsj',
+      'xdje',
+      'sgrq',
+      'sgsj',
+      'sgjg',
+      'sgsl'
+    ],
+    'ycf': [
+      'tjdh',
+      'sjcf',
+      'cfsj',
+      'wtsj',
+      'wtfx',
+      'sjwtjg',
+      'wtsl',
+      'wtje',
+      'wtzt',
+      'sbyy',
+      'sgjg',
+      'xdje',
+      'xdsj'
+    ],
+    'yjs': [
+      'tjdh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtlx',
+      'wtfx',
+      'jzrq',
+      'cjsj',
+      'xdsj',
+      'xdje',
+      'sgrq',
+      'sgsj',
+      'sgjg',
+      'sgsl',
+      'jssj',
+      'jsyy'
+    ]
+  },
+  'confirmTipColorConfig': {
+    'title': '#323233',
+    'value': '#666'
+  },
+  'confirmTipFieldConfig': {
+    'zndx': [
+      'dxsj',
+      'sgsl',
+      'yypz'
+    ],
+    'gdmr': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'jzrq'
+    ],
+    'djmc': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'jzrq'
+    ],
+    'zyzs': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'jzrq'
+    ],
+    'rzdf': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'wtfx',
+      'jzrq'
+    ],
+    'etfdt': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'jzrq'
+    ],
+    'ftmr': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'jzrq'
+    ],
+    'hlmc': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'jzrq'
+    ],
+    'kbmc': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'jzrq'
+    ],
+    'jxtp': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'wtfx',
+      'jzrq'
+    ],
+    'bzwj': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'jzrq',
+      'mrjg',
+      'mcjg',
+      'mbwt',
+      'wtje',
+      'wtfs',
+      'bswt',
+      'wtlx'
+    ],
+    'gznhg': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'jzrq'
+    ],
+    'dsmm': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'wtfx'
+    ],
+    'ldmm': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'wtfx',
+      'jzrq'
+    ],
+    'fpmr': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'jzrq'
+    ],
+    'fpmc': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'gjsz',
+      'jzrq'
+    ],
+    'zngznhg': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'wtfs',
+      'xdpz',
+      'xdsj',
+      'xdll',
+      'xdje',
+      'jzrq'
+    ],
+    'yswt': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtfx',
+      'wtjg',
+      'wtsl'
+    ],
+    'ztmm': [
+      'zqmc',
+      'zqdm',
+      'tjlx',
+      'gdzh',
+      'cftj',
+      'wtjg',
+      'wtsl',
+      'wtje',
+      'gjsz',
+      'wtfx',
+      'jzrq'
+    ]
+  },
+  'mainXieyiif': false,
+  'subMission': false,
+  'isPricelimit': false,
+  'mainNavhistory': false,
+  'xieyiif': true,
+  'isShowNavBar': true,
+  'navBarRightText': '',
+  'triggerConditionText': '',
+  'marketPlan': false,
+  'wtMultiple': true,
+  'wtlxGxh': true,
+  'countProportion': false,
+  'bzStrategy': false,
+  'isShowAppNotice': false,
+  'showDescription': '',
+  'selectSeven': true,
+  'isShowTrigger': true,
+  'showCopyButton': true,
+  'advancedSetupSetting': [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5'
+  ],
+  'hasEntrustTypeConfig': [
+    '1',
+    '2'
+  ],
+  'isShowTriggerType': false,
+  'isOpenReitsCheckProf': false,
+  'isBackToPage': false,
+  'showGdmr': false,
+  'isShowIntroduction': false,
+  'showWtNotice': true,
+  'hasSuspendAndRestore': true,
+  'isSupportHistorySearch': false,
+  'introImgUrlList': {},
+  'showBackSellSwitch': false,
+  'supportPriceDiff': false,
+  'isSupportReitsWarnTip': false,
+  'showWtjgDes': true,
+  'detailsConfig': {
+    '7': [
+      'wtfx'
+    ],
+    '9': [
+      'wtfx'
+    ],
+    '22': [
+      'wtfx'
+    ],
+    '35': [
+      'jzj'
+    ],
+    '38': [
+      'wtfx'
+    ]
+  },
+  'isShowUpWtfxDetails': true,
+  'isShowDsmmCreateTime': true,
+  'showSjwtWtjgDes': true,
+  'limitQuery': [
+    22
+  ],
+  'showHomeRight': false,
+  'isOpenGoStockDetail': false,
+  'bzwjTriggerFailedDesDiff': false,
+  'isOpenTriggerPriceFixed': true,
+  'isShowAnalyseHot': true,
+  'zndxActivatePermissions': false,
+  'localZndxFxjs': true,
+  'isShowZndxSx': false,
+  'zndxNoticeBarTopIsShow': false,
+  'zndxNoticeBarBottomIsShow': false,
+  'openZndxSubmitCheck': false,
+  'knowMore': true,
+  'kbmcRiskWarning': [
+    '1、盘中临停期间创建开板卖出条件单，将以临停前最新价作为触发基准价，如遇复盘后直接下跌，可能导致委托价格过高，从而无法成交。',
+    '2、根据证券交易规则，上市前5日无涨跌幅限制品种，无涨跌停限制，不支持开板卖出条件单创建。'
+  ],
+  'dsmmWritePrompt': false,
+  'zndxJumpIntroductionIsShow': false,
+  'isShowEnableBalanceInBuyDirection': false,
+  'isRefreshQuotation': false,
+  'isOpenNativeFeedBack': false
 }

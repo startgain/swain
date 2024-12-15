@@ -3,14 +3,15 @@ const $ = require('./utils')
 class ConfigManager {
   constructor() {
     this._configs = []
+    this._routeMapConfig = {}
     this.registerSettings()
   }
-
-  registerSettings(configs = [[{}, {}, '']]) {
-    this._configs = configs.map(([config, fieldDetails, rootName], index) => ({
+  registerSettings(configs = [[{}, {}, '',{}]]) {
+    this._configs = configs.map(([config, fieldDetails, rootName, routeMapConfig], index) => ({
       id: rootName || `config_${index}`,
       config,
-      fieldDetails
+      fieldDetails,
+      routeMapConfig
     }))
   }
 

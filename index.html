@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Eruda Demo</title>
-    <style>
-        body {
-            padding: 0;
-            margin: 0;
-        }
-    </style>
-    <!-- 引入 eruda -->
-    <script src="node_modules/eruda/eruda.js"></script>
 
-    <!-- 引入配置文件 -->
-    <script src="src/config.js"></script>
-    <script>eruda.init({tool: []});</script>
-    <script src="assets/eruda-config.js"></script>
-    <script>
-        eruda.add(erudaConfig).show('config').show();
-        // 初始化并注入配置
-        eruda.erudaConfig.registerSettings([[window.LOCAL_CONFIG,window.CONFIG_DETAILS,'config'], [{personal:{name:'zhangsan'}},{},'setting']])
-        // eruda.erudaConfig.registerSettings([
-        //     [{personal:{name:'lisi'}},{},'config'], 
-        //     [{personal:{name:'zhangsan'}},{},'setting']
-        // ])
-    </script>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Eruda Demo</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+  <!-- 引入 eruda -->
+  <script src="node_modules/eruda/eruda.js"></script>
+
+  <!-- 引入配置文件 -->
+  <script src="src/config.js"></script>
+  <script>
+    eruda.init({ tool: [] })
+  </script>
+  <script src="assets/eruda-config.js"></script>
+  <script>
+    eruda.add(erudaConfig).show('config').show()
+    // 初始化并注入配置
+    eruda.erudaConfig.registerSettings([
+      [window.LOCAL_CONFIG, window.CONFIG_DETAILS, 'LOCAL_CONFIG', {
+        'a': ['AESPARAMSLISTRES', 'CODE_REG'],
+        'b': ['QUOTA', 'IS_OPEN_VCONSOLE'],
+        'c': ['ZNDX_FXTS_INFO', 'OPEN_CHECK_MARKET_ENTRUST'],
+      }],
+      [window.PERSONALIZE_SETTING, {}, 'PERSONALIZE_SETTING', {
+        a: ['confirmTipColorConfig'],
+        b: ['zndxNoticeBarTopIsShow'],
+        c: ['zndxJumpIntroductionIsShow'],
+      }],
+    ])
+  </script>
 </head>
+
 <body>
-    <!-- 页面内容 -->
+  <!-- 页面内容 -->
 </body>
-</html>    
+<script>
+
+</script>
+
+</html>

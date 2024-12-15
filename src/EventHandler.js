@@ -92,7 +92,6 @@ class EventHandler {
         const key = path.split('.').slice(-1)[0]
         const newArrayHtml = this._domRenderer._renderArrayItem(key, array, path, true)
         parentNode.parentNode.outerHTML = newArrayHtml
-       
       }
     }
   }

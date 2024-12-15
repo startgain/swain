@@ -30,8 +30,11 @@ module.exports = function(eruda) {
       
       // 绑定事件处理
       this._eventHandler.bindEvents($el[0])
+      window.addEventListener('hashchange',()=>{
+        // hash变化重新渲染
+        this._domRenderer.renderTree($el)
+      })
     }
-    
     // 更新配置和字段说明
     registerSettings(configs) {
       this._configManager.registerSettings(configs)
